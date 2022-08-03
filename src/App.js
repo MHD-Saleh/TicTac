@@ -1,20 +1,33 @@
 import React from "react";
-import "./App.css";
-import Form from "./component/form/Form";
+//import "./App.css";
 
-import Header from "./component/Header/Header";
-import Sidebar from "./component/Sidebar/Sidebar";
+import { BrowserRouter } from "react-router-dom";
+
+import Router from "./Routes";
 
 function App() {
   return (
-    <div className="App">
-      <Header />
-      <div className="main">
-        <Sidebar />
-        <Form />
-      </div>
+    <div>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
     </div>
   );
 }
 
+/*function App() {
+  return (
+    <div>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
+    </div>
+  );
+}
+ */
+
 export default App;
+
+/* <Sidebar /> */
+/* <Header /> */
+/* <Form /> */

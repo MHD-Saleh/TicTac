@@ -1,23 +1,31 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 export const addUserr = createAsyncThunk("user/add", async (user) => {
-  const res = await axios.post("http://localhost:5000/api/users", user);
+  const res = await axios.post("localhost:3001/", user);
   return res.data;
 });
 
 export const userSlice = createSlice({
   name: "user",
   initialState: {
-    userData: { name: "", email: "" },
+    myaccount: {
+      name: "",
+      room: "",
+    },
+    userData: { name: "", room: "" },
 
     loading: null,
     error: false,
   },
   reducers: {
-    // addUser: (state, action) => {
-    //   state.name = action.payload.name;
-    //   state.email = action.payload.email;
-    // },
+    setNameRoom: (state, action) => {
+      state.name = action.payload.name;
+      state.email = action.payload.email;
+    },
+    testset: (state, action) => {
+      state.myaccount = action.payload;
+    },
+
     startUser: (state) => {
       state.loading = true;
     },
@@ -49,10 +57,11 @@ export const userSlice = createSlice({
 
 export const {
   addUser,
-
   startUser,
   successUser,
   errorUser,
+  setNameRoom,
+  testset,
 } = userSlice.actions;
 
 export default userSlice.reducer;

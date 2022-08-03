@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { addUser } from "../../redux/api";
 import "./Form.css";
 import { useDispatch, useSelector } from "react-redux";
+import { addUserr } from "../../redux/userSlice";
+import "@fontsource/roboto/500.css";
 
 function Form() {
   const [name, setname] = useState("");
@@ -11,7 +13,8 @@ function Form() {
 
   const handelClick = (e) => {
     e.preventDefault();
-    addUser({ name, email }, dispatch);
+    // addUser({ name, email }, dispatch);
+    dispatch(addUserr({ name, email }));
   };
 
   return (
