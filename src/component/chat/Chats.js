@@ -8,7 +8,7 @@ let socket;
 //localhost:3001/
 //127.0.0.1:3001/
 
-const CONNECTION_PORT = "192.168.1.103:3001/";
+const CONNECTION_PORT = "https://nodejs-chat-react.herokuapp.com/";
 
 function Chats() {
   // Before Login
