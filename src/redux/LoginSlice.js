@@ -16,8 +16,13 @@ export const userSlice = createSlice({
 
     loading: null,
     error: false,
+    Type: "",
+    turn: false,
   },
   reducers: {
+    setType: (state, action) => {
+      state.Type = action.payload;
+    },
     setNameRoom: (state, action) => {
       state.name = action.payload.name;
       state.email = action.payload.email;
@@ -62,6 +67,7 @@ export const {
   errorUser,
   setNameRoom,
   testset,
+  setType,
 } = userSlice.actions;
 
 export default userSlice.reducer;

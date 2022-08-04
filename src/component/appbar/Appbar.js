@@ -10,6 +10,7 @@ import Menu from "@mui/material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { useSelector } from "react-redux";
 export default function Appbar() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -62,6 +63,8 @@ export default function Appbar() {
     </Menu>
   );
 
+  const { Type, myaccount } = useSelector((state) => state.userlog);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -82,6 +85,11 @@ export default function Appbar() {
           >
             Tic Tac toe
           </Typography>
+          {Type && (
+            <Box sx={{ marginLeft: "50px" }}>
+              <Typography color={"white"}>You'r : {Type}</Typography>
+            </Box>
+          )}
 
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
@@ -105,6 +113,11 @@ export default function Appbar() {
             >
               <AccountCircle />
             </IconButton>
+            {myaccount.name && (
+              <Box sx={{ marginLeft: "10px", marginTop: "10px" }}>
+                <Typography color={"white"}>{myaccount.name}</Typography>
+              </Box>
+            )}
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -117,6 +130,11 @@ export default function Appbar() {
             >
               <AccountCircle />
             </IconButton>
+            {myaccount.name && (
+              <Box sx={{ marginLeft: "10px", marginTop: "10px" }}>
+                <Typography color={"white"}>{myaccount.name}</Typography>
+              </Box>
+            )}
           </Box>
         </Toolbar>
       </AppBar>
