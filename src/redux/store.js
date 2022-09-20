@@ -7,6 +7,21 @@ const store = configureStore({
     user: userSlice,
     userlog: LoginSlice,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export default store;
+
+/*const store = configureStore({
+  reducer: {
+    user: userSlice,
+    userlog: LoginSlice,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }).prepend(listenerMiddleware.middleware),
+}); */

@@ -2,55 +2,123 @@ import {
   Box,
   Button,
   ButtonGroup,
-  Dialog,
-  DialogTitle,
   Grid,
   Paper,
-  Stack,
-  Switch,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setType } from "../redux/LoginSlice";
+import {
+  sendMSG,
+  setType,
+  setboard,
+  setPlayer,
+  setTurn,
+  setRest,
+} from "../redux/LoginSlice";
 
 const Main = () => {
+  const { myaccount, Turn, player, board } = useSelector(
+    (state) => state.userlog
+  );
   const dispatch = useDispatch();
-  const { Type } = useSelector((state) => state.userlog);
 
   const [isSelectedturn, setisSelectedturn] = useState(false);
   const [myType, setmyType] = useState("");
-  const [checked, setChecked] = React.useState(true);
 
-  const handleChange = (event) => {
-    setChecked(event.target.checked);
+  //const [board, setboard] = useState(["", "", "", "", "", "", "", "", ""]);
+
+  //const [turn, setTurn] = useState("X");
+  //const [player, setPlayer] = useState("X");
+
+  const chooseSquare = async (square) => {
+    if (Turn === player && board[square] === "") {
+      console.log("clicked : " + square);
+      dispatch(setTurn(player === "X" ? "O" : "X"));
+
+      var tt = player === "X" ? "O" : "X";
+
+      dispatch(
+        sendMSG({
+          room: myaccount.room,
+          name: myaccount.name,
+          type: "game-move",
+          data: { square, tt },
+        })
+      );
+      //await socket.emit("send_game", player);
+      dispatch(
+        setboard(
+          board.map((val, idx) => {
+            if (idx === square && val === "") {
+              return player;
+            }
+            return val;
+          })
+        )
+      );
+    } else {
+      console.log("not my turn " + Turn);
+    }
   };
-  const [board, setboard] = useState([
-    "x",
-    "o",
-    "x",
-    "x",
-    "o",
-    "x",
-    "x",
-    "o",
-    "o",
-  ]);
 
-  const [open, setOpen] = useState(false);
+  const Patterns = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  const chick_win = () => {
+    if (
+      (board[0] === "X" && board[1] === "X" && board[2] === "X") ||
+      (board[3] === "X" && board[4] === "X" && board[5] === "X") ||
+      (board[6] === "X" && board[7] === "X" && board[8] === "X") ||
+      (board[0] === "X" && board[3] === "X" && board[6] === "X") ||
+      (board[1] === "X" && board[4] === "X" && board[7] === "X") ||
+      (board[2] === "X" && board[5] === "X" && board[8] === "X") ||
+      (board[0] === "X" && board[4] === "X" && board[8] === "X") ||
+      (board[2] === "X" && board[4] === "X" && board[6] === "X")
+    ) {
+      alert("player X win the game !");
+      dispatch(setRest());
+    }
+    if (
+      (board[0] === "O" && board[1] === "O" && board[2] === "O") ||
+      (board[3] === "O" && board[4] === "O" && board[5] === "O") ||
+      (board[6] === "O" && board[7] === "O" && board[8] === "O") ||
+      (board[0] === "O" && board[3] === "O" && board[6] === "O") ||
+      (board[1] === "O" && board[4] === "O" && board[7] === "O") ||
+      (board[2] === "O" && board[5] === "O" && board[8] === "O") ||
+      (board[0] === "O" && board[4] === "O" && board[8] === "O") ||
+      (board[2] === "O" && board[4] === "O" && board[6] === "O")
+    ) {
+      alert("player O win the game !");
+      dispatch(setRest());
+    }
+  };
+  useEffect(() => {
+    chick_win();
+  }, [board]);
 
   const handelSelectO = () => {
     setisSelectedturn(true);
-    dispatch(setType("o"));
+    dispatch(setType("O"));
     setmyType("o");
-    console.log("select o");
+    dispatch(setPlayer("O"));
+    //setPlayer("O");
   };
   const handelSelectX = () => {
     setisSelectedturn(true);
-    dispatch(setType("x"));
-    setmyType("x");
-    console.log("select x");
+    dispatch(setType("X"));
+    setmyType("X");
+    dispatch(setPlayer("X"));
+    //setPlayer("X");
   };
   return (
     <>
@@ -104,13 +172,6 @@ const Main = () => {
                       border: `2px solid #2E3B55`,
                     }}
                   >
-                    {Type && (
-                      <Box sx={{ marginLeft: "50px" }}>
-                        <Typography color={"white"}>
-                          my Type is : {Type}
-                        </Typography>
-                      </Box>
-                    )}
                     <Grid
                       container
                       spacing={{ xs: 1, md: 1 }}
@@ -119,7 +180,9 @@ const Main = () => {
                       {board.map((item, index) => (
                         <Grid key={item.index} item>
                           <Box
-                            onClick={() => console.log(index)}
+                            onClick={() => {
+                              chooseSquare(index);
+                            }}
                             sx={{
                               marginLeft: "14px",
                               marginTop: "15px",

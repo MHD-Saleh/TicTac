@@ -16,7 +16,7 @@ import { useFormik, Form, FormikProvider } from "formik";
 import * as Yup from "yup";
 import { Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { setNameRoom, testset } from "../../redux/LoginSlice";
+import { loguser, setconnection, setmyroom } from "../../redux/LoginSlice";
 import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
@@ -41,15 +41,6 @@ export default function MyLogin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSubmitt = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
-
   const LoginSchema = Yup.object().shape({
     name: Yup.string().required("name is required"),
     room: Yup.string().required("room is required"),
@@ -70,21 +61,25 @@ export default function MyLogin() {
     },
   });
 
-  const handelsubmitt = () => {
+  const handel_sub = () => {
     dispatch(
-      testset({
+      loguser({
         name: getFieldProps("name").value,
         room: getFieldProps("room").value,
       })
     );
+    dispatch(setconnection());
+    dispatch(setmyroom());
+
     navigate("/main");
   };
 
   const {
     errors,
     touched,
-    values,
+    dirty,
     isSubmitting,
+    isValid,
     handleSubmit,
     getFieldProps,
   } = formik;
@@ -157,13 +152,16 @@ export default function MyLogin() {
                       helperText={touched.room && errors.room}
                     />
                   </Stack>
-
                   <Button
                     sx={{ marginTop: "20px" }}
                     fullWidth
                     size="large"
                     type="submit"
                     variant="contained"
+                    disabled={isSubmitting || !isValid || !dirty}
+                    onClick={() => {
+                      handel_sub();
+                    }}
                   >
                     Enter
                   </Button>
@@ -173,18 +171,6 @@ export default function MyLogin() {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-              <Button
-                sx={{ marginTop: "20px" }}
-                fullWidth
-                size="large"
-                type="submit"
-                variant="contained"
-                onClick={() => {
-                  handelsubmitt();
-                }}
-              >
-                redux
-              </Button>
 
               <Copyright sx={{ mt: 5 }} />
             </Box>
