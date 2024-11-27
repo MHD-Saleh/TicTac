@@ -51,7 +51,9 @@ export const userSlice = createSlice({
     },
     setconnection: (state) => {
       //127.0.0.1:3001/
-      socket = io("https://nodejs-chat-react.herokuapp.com/");
+      // socket = io("https://nodejs-chat-react.herokuapp.com/");
+            // socket = io("localhost:5000/");
+      socket = io("ws://slow-big-comic.glitch.me");
       state.connection = socket;
       console.log("set connection from redux ");
       /*socket.on("receive_message", (data) => {
